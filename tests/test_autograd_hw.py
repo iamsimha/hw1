@@ -290,6 +290,11 @@ def gradient_check(f, *args, tol=1e-6, backward=False, **kwargs):
         out = f(*args, **kwargs).sum()
         out.backward()
         computed_grads = [a.grad.numpy() for a in args]
+    for i in range(len(args)):
+        print("computed")
+        print(computed_grads[i], computed_grads[i].shape)
+        print("numerical")
+        print(numerical_grads[i], numerical_grads[i].shape)
     error = sum(
         np.linalg.norm(computed_grads[i] - numerical_grads[i])
         for i in range(len(args))
@@ -314,6 +319,7 @@ def test_matmul_batched_backward():
     gradient_check(ndl.matmul, ndl.Tensor(np.random.randn(6, 6, 5, 4)), ndl.Tensor(np.random.randn(6, 6, 4, 3)))
     gradient_check(ndl.matmul, ndl.Tensor(np.random.randn(6, 6, 5, 4)), ndl.Tensor(np.random.randn(4, 3)))
     gradient_check(ndl.matmul, ndl.Tensor(np.random.randn(5, 4)), ndl.Tensor(np.random.randn(6, 6, 4, 3)))
+    gradient_check(ndl.matmul, ndl.Tensor(np.random.randn(3, 2, 1)), ndl.Tensor(np.random.randn(3, 3, 1, 2)))
 
 
 def test_reshape_backward():
@@ -341,6 +347,7 @@ def test_summation_backward():
     gradient_check(ndl.summation, ndl.Tensor(np.random.randn(5,4)), axes=(0,))
     gradient_check(ndl.summation, ndl.Tensor(np.random.randn(5,4)), axes=(0,1))
     gradient_check(ndl.summation, ndl.Tensor(np.random.randn(5,4,1)), axes=(0,1))
+    gradient_check(ndl.summation, ndl.Tensor(np.random.randn(3,2,1)))
 
 
 def submit_backward():
