@@ -263,12 +263,13 @@ def negate(a):
 class Log(TensorOp):
     def compute(self, a):
         ### BEGIN YOUR SOLUTION
-        raise NotImplementedError()
+        return array_api.log(a)
         ### END YOUR SOLUTION
 
     def gradient(self, out_grad, node):
         ### BEGIN YOUR SOLUTION
-        raise NotImplementedError()
+        inp = node.inputs[0]
+        return out_grad * 1.0/inp
         ### END YOUR SOLUTION
 
 
@@ -279,12 +280,13 @@ def log(a):
 class Exp(TensorOp):
     def compute(self, a):
         ### BEGIN YOUR SOLUTION
-        raise NotImplementedError()
+        return array_api.exp(a)
         ### END YOUR SOLUTION
 
     def gradient(self, out_grad, node):
         ### BEGIN YOUR SOLUTION
-        raise NotImplementedError()
+        inp = node.inputs[0]
+        return Exp()(inp) * out_grad
         ### END YOUR SOLUTION
 
 

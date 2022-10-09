@@ -30,7 +30,14 @@ def parse_mnist(image_filesname, label_filename):
                 for MNIST will contain the values 0-9.
     """
     ### BEGIN YOUR SOLUTION
-    raise NotImplementedError()
+    with gzip.open(image_filesname) as f:
+        pixels = np.frombuffer(f.read(), 'B', offset=16)
+        print(pixels.dtype)
+    
+    with gzip.open(label_filename) as f:
+        labels = np.frombuffer(f.read(), 'B', offset=8)
+        
+        return pixels.reshape(-1, 784).astype(np.float32) / 255.0, labels
     ### END YOUR SOLUTION
 
 
@@ -51,8 +58,9 @@ def softmax_loss(Z, y_one_hot):
         Average softmax loss over the sample. (ndl.Tensor[np.float32])
     """
     ### BEGIN YOUR SOLUTION
-    raise NotImplementedError()
-    ### END YOUR SOLUTION
+    part_1 = ndl.Log()(ndl.Summation((-1,))(ndl.Exp()(Z)))
+    part_2 = ndl.Summation((-1,))(Z*y_one_hot)
+    return ndl.Summation()(part_1 - part_2) / part_1.shape[0]
 
 
 def nn_epoch(X, y, W1, W2, lr = 0.1, batch=100):
