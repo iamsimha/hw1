@@ -298,12 +298,13 @@ def exp(a):
 class ReLU(TensorOp):
     def compute(self, a):
         ### BEGIN YOUR SOLUTION
-        raise NotImplementedError()
+        return (a > 0) * a
         ### END YOUR SOLUTION
 
     def gradient(self, out_grad, node):
         ### BEGIN YOUR SOLUTION
-        raise NotImplementedError()
+        inp = node.inputs[0].realize_cached_data()
+        return Tensor(inp > 0) * out_grad
         ### END YOUR SOLUTION
 
 

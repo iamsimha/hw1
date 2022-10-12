@@ -88,7 +88,27 @@ def nn_epoch(X, y, W1, W2, lr = 0.1, batch=100):
     """
 
     ### BEGIN YOUR SOLUTION
-    raise NotImplementedError()
+    ### BEGIN YOUR CODE
+    batch_size = batch
+    ### BEGIN YOUR CODE
+    num_batches = X.shape[0] // batch_size
+    num_classes = np.unique(y).shape[0]
+    i = 0
+    while i < X.shape[0]:
+        features = X[i : i + batch_size] # batch_size X input_dim
+        label = y[i : i + batch_size]
+        label_one_hot = np.zeros((label.shape[0], num_classes))
+        label_one_hot[np.arange(label_one_hot.shape[0]), label] = 1
+
+        features = ndl.Tensor(features)
+        label_one_hot = ndl.Tensor(label_one_hot, dtype=np.uint8)
+        logits = ndl.MatMul()(ndl.ReLU()(ndl.MatMul()(features, W1)), W2)
+        loss = softmax_loss(logits, label_one_hot)
+        loss.backward()
+        W1 = ndl.Tensor(W1.numpy() - lr * W1.grad.numpy())
+        W2 = ndl.Tensor(W2.numpy() - lr * W2.grad.numpy())
+        i += batch_size
+    return W1, W2
     ### END YOUR SOLUTION
 
 
